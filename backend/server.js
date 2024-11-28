@@ -1,28 +1,27 @@
 const express = require('express');
 const cors = require('cors');
+const mongoose = require('mongoose');
+const dotenv = require('dotenv');
+const authRoutes = require('./routes/auth');
 
+dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// Middleware
 app.use(cors());
 app.use(express.json());
 
-// Sample data
-const items = [
-    { id: 1, name: 'Item 1' },
-    { id: 2, name: 'Item 2' },
-    { id: 3, name: 'Item 3' },
-];
+// MongoDB connection
+mongoose.connect(process.env.MONGO_URI)
+    .then(() => console.log('Connected to MongoDB'))
+    .catch(err => console.error('MongoDB connection error:', err)); 
 
-app.get('/', (req, res) => {
-    res.send('Hello from the backend!');
-});
+// Routes
+app.use('/api/auth', authRoutes);
 
-// New endpoint to get items
-app.get('/api/items', (req, res) => {
-    res.json(items);
-});
+app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
 
-app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+mongoose.connection.on('error', (err) => {
+    console.error('MongoDB connection error:', err);
 });

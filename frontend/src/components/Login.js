@@ -1,44 +1,33 @@
 import React, { useState } from 'react';
-import './css/Login.css'; // Import the CSS file
+import { login } from '../api/api';
 
-const Login = ({ onLogin }) => {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
+const Login = () => {
+    const [form, setForm] = useState({ email: '', password: '' });
+    const [message, setMessage] = useState('');
 
-    const handleSubmit = (e) => {
+    const handleChange = (e) => {
+        setForm({ ...form, [e.target.name]: e.target.value });
+    };
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Simulate an authentication check
-        if (username === 'user' && password === 'password') {
-            onLogin(true);
-        } else {
-            alert('Invalid credentials');
+        try {
+            const response = await login(form);
+            setMessage(`Login successful! Token: ${response.data.token}`);
+        } catch (err) {
+            setMessage('Error logging in. Please try again.');
         }
     };
 
     return (
-        <div className="login-container">
-            <form className="login-form" onSubmit={handleSubmit}>
-                <h2>Login</h2>
-                <div>
-                    <label>Username:</label>
-                    <input
-                        type="text"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        required
-                    />
-                </div>
-                <div>
-                    <label>Password:</label>
-                    <input
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                    />
-                </div>
+        <div>
+            <h1>Login</h1>
+            <form onSubmit={handleSubmit}>
+                <input name="email" placeholder="Email" onChange={handleChange} />
+                <input type="password" name="password" placeholder="Password" onChange={handleChange} />
                 <button type="submit">Login</button>
             </form>
+            {message && <p>{message}</p>}
         </div>
     );
 };

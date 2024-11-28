@@ -1,37 +1,22 @@
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Home from './components/Home';
-import About from './components/About';
-import Contact from './components/Contact';
-import Profile from './components/Profile';
-import Dashboard from './components/Dashboard';
-import NotFound from './components/NotFound';
-import Navbar from './components/Navbar';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Signup from './components/Signup';
 import Login from './components/Login';
+import Navbar from './components/Navbar';
+import Dashboard from './components/Dashboard';
 
-function App() {
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-    const handleLogin = (status) => {
-        setIsAuthenticated(status);
-    };
-
+const App = () => {
     return (
         <Router>
-            <div>
-                <Navbar />
-                <h1>My React App</h1>
-                <Routes>
-                    <Route path="/" element={isAuthenticated ? <Home /> : <Login onLogin={handleLogin} />} />
-                    <Route path="/about" element={<About />} />
-                    <Route path="/contact" element={<Contact />} />
-                    <Route path="/profile" element={isAuthenticated ? <Profile /> : <Login onLogin={handleLogin} />} />
-                    <Route path="/dashboard" element={isAuthenticated ? <Dashboard /> : <Login onLogin={handleLogin} />} />
-                    <Route path="*" element={<NotFound />} /> {/* Catch-all route for 404 */}
-                </Routes>
-            </div>
+            <Navbar />
+            <Routes>
+                <Route path="/signup" element={<Signup />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/dashboard" element={<Dashboard />} />
+
+            </Routes>
         </Router>
     );
-}
+};
 
 export default App;

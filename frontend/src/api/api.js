@@ -1,6 +1,13 @@
 import axios from 'axios';
 
-export const fetchMessage = async () => {
-    const response = await axios.get('http://localhost:5000/'); // Adjust the URL as needed
-    return response.data;
+const API_URL = 'http://localhost:5000/api/auth'; // Ensure this matches your backend's route
+
+// Signup API
+export const signup = async (userData) => {
+    return await axios.post(`${API_URL}/signup`, userData);
+};
+
+// Login API
+export const login = async (credentials) => {
+    return await axios.post(`${API_URL}/login`, credentials);
 };
