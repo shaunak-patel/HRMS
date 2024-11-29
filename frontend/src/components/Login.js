@@ -15,19 +15,17 @@ const Login = () => {
             const response = await axios.post('http://localhost:5000/api/auth/login', formData);
             const { token } = response.data;
     
-            // Save the token to localStorage
+            // Save token to localStorage
             localStorage.setItem('token', token);
     
-            // Debugging log for confirmation
-            console.log('Login successful! Token:', token);
-    
-            // Redirect to dashboard
-            window.location.href = '/Dashboard'; // This should trigger the navigation
+            // Redirect to EmployeeDetails page
+            window.location.href = '/profile';
         } catch (err) {
             console.error('Login Error:', err.response?.data || err.message);
-            setMessage(err.response?.data?.error || 'Login failed.');
+            setMessage('Login failed.');
         }
     };
+    
 
     return (
         <div>

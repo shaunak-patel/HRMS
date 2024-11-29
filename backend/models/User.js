@@ -1,9 +1,15 @@
 const mongoose = require('mongoose');
 
-const UserSchema = new mongoose.Schema({
-    username: { type: String, required: true, unique: true },
+const userSchema = new mongoose.Schema({
+    username: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
+    leaveBalance: { type: Number, default: 10 }, // Add leave balance
+    tasks: [{ type: String }], // Array of task descriptions
+    performanceMetrics: {
+        totalTasks: { type: Number, default: 0 },
+        completedTasks: { type: Number, default: 0 },
+    },
 });
 
-module.exports = mongoose.model('User', UserSchema);
+module.exports = mongoose.model('User', userSchema);
