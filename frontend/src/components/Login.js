@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
-const Login = () => {
+const Login = ({ setIsLoggedIn }) => {
     const [formData, setFormData] = useState({ email: '', password: '' });
     const [message, setMessage] = useState('');
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -14,24 +16,24 @@ const Login = () => {
         try {
             const response = await axios.post('http://localhost:5000/api/auth/login', formData);
             const { token } = response.data;
-    
-            // Save token to localStorage
+
             localStorage.setItem('token', token);
-    
-            // Redirect to EmployeeDetails page
-            window.location.href = '/profile';
+            setIsLoggedIn(true);
+
+            // Redirect to dashboard
+            navigate('/dashboard');
         } catch (err) {
             console.error('Login Error:', err.response?.data || err.message);
-            setMessage('Login failed.');
+            setMessage(err.response?.data?.error || 'Login failed.');
         }
     };
-    
 
     return (
         <div>
             <h1>Login</h1>
             <form onSubmit={handleSubmit}>
                 <input
+                    type="email"
                     name="email"
                     placeholder="Email"
                     value={formData.email}
